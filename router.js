@@ -19,7 +19,7 @@ const Database = require('./database/db');
 const db = new Database();
 
 router.get('/', (req, res) => {
-    res.render("login");
+    res.render("login", { error: null });
 });
 
 router.post('/login', (req, res) => {
@@ -29,7 +29,7 @@ router.post('/login', (req, res) => {
     db.verificarDatos(nombre_usuario, clave, (err, user) => {
         if (err) {
             console.error(err.message);
-            res.status(500).send("Error durante el inicio de sesión");
+            res.render("login", { error: "Error durante el inicio de sesión" });
         } else if (user) {
             res.redirect('/index');
         } else {
@@ -37,6 +37,7 @@ router.post('/login', (req, res) => {
         }
     });
 });
+
 
 router.get('/historial_paciente', (req, res) => {
     db.getHistorialMedicacion((err, historial) => {

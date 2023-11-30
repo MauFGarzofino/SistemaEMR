@@ -35,6 +35,25 @@
         </div>
     </div>
     <script>
+        const opciones = document.querySelectorAll('.opciones');
+
+        opciones.forEach(opcion => {
+            opcion.addEventListener('click', function () {
+                opciones.forEach(item => item.classList.remove('selected'));
+
+                this.classList.add('selected');
+                if (this.id === 'btnUsuarios') {
+                    fetch('/usuarios')
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('titulo').innerText = 'Lista de Usuarios';
+                            document.getElementById('contenido').innerHTML = html;
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+
         document.getElementById('btnUsuarios').addEventListener('click', function () {
             fetch('/usuarios')
                 .then(response => response.text())
@@ -64,7 +83,7 @@
                 .catch(error => console.error('Error:', error));
         });
 
-        
+
         document.getElementById('btnPacientes').addEventListener('click', function () {
             fetch('/listar-pacientes')
                 .then(response => response.text())
@@ -96,7 +115,7 @@
         });
 
 
-        
+
     </script>
 </body>
 

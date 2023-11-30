@@ -131,3 +131,36 @@ td img#iconUsuario:hover {
     text-align: center;
     color: #3a6179;
 }
+
+#busqueda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#busqueda form {
+    display: flex;
+}
+
+#busqueda input[type="text"] {
+    width: 800px;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#busqueda button {
+    width: 100px;
+    padding: 10px ;
+    background-color: #4c82af;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#busqueda button:hover {
+    background-color: #3972a0;
+}
