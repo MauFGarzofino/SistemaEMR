@@ -1,5 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'public/imagenes'); 
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const Database = require('./database/db');
 const db = new Database();
@@ -56,22 +70,20 @@ router.get('/crearU', (req, res) => {
 
 router.use(express.urlencoded({ extended: true }));
 
-router.post('/crearUsuario', (req, res) => {
-    // Recoge los datos del formulario desde req.body
+router.post('/crearUsuario', upload.single('foto_perfil'), (req, res) => {
     const nuevoUsuario = {
-        nombre: req.body.nombre,
-        cuenta: req.body.cuenta,
+        nombre_mostrar: req.body.nombre_mostrar,
+        nombre_usuario: req.body.nombre_usuario,
         clave: req.body.clave,
-        email: req.body.email,
-        rol: req.body.rol,
-        estampa: req.body.estampa
+        foto_perfil: req.file ? req.file.filename : null
     };
 
     db.addUsuario(nuevoUsuario, (err) => {
         if (err) {
             console.error(err.message);
+            res.status(500).send("Error al crear el usuario");
         } else {
-            res.redirect('/');
+            res.redirect('/index');
         }
     });
 });
@@ -83,40 +95,37 @@ router.get('/edit/:id', (req, res) => {
             console.error(err.message);
             res.status(500).send("Error al recuperar el usuario");
         } else {
-            res.render("edit_usuario", { usuario: usuario });
+            res.render("editarUsuario", { usuario: usuario });
         }
     });
 });
 
-router.post('/editar/:id', (req, res) => {
-    const id = req.params.id; // Captura el ID del usuario desde la URL
+router.post('/editar/:id', upload.single('foto_perfil'), (req, res) => {
+    const id = req.params.id; 
+    console.log("Datos recibidos:", req.body.nombre_mostrar, req.body.nombre_usuario, req.body.clave);
 
-    // Primero, obtén el usuario actual de la base de datos para tener acceso a su foto de perfil actual
     db.getUsuarioPorId(id, (err, usuarioActual) => {
         if (err) {
             console.error(err.message);
             return res.status(500).send("Error al recuperar el usuario");
         }
-
-        // Luego, construye el objeto de usuario con la nueva información
-        console.log(req.body.nombre_mostrar, req.body.nombre_usuario, req.body.clave)
+        console.log("Datos recibidos:", req.body.nombre_mostrar, req.body.nombre_usuario, req.body.clave);
         const nuevoDatosUsuario = {
             nombre_mostrar: req.body.nombre_mostrar,
             nombre_usuario: req.body.nombre_usuario,
             clave: req.body.clave,
-            // Usa la imagen actual si no se cargó una nueva
-            foto_perfil: req.file ? req.file.filename : usuarioActual.foto_perfil
+            foto_perfil: req.file ? req.file.filename : null
         };
 
         // Ahora llama a la función de actualización con los nuevos datos
         db.updateUsuario(id, nuevoDatosUsuario, (error) => {
             if (error) {
                 console.error(error.message);
-                // Puedes optar por mostrar un mensaje de error en la vista de edición
-                return res.status(500).render('edit_usuario', { error: "Error al actualizar el usuario", usuario: nuevoDatosUsuario });
+                return res.status(500).render('editarUsuario', { error: "Error al actualizar el usuario", usuario: nuevoDatosUsuario });
             }
-            res.redirect('/index');
         });
+        res.redirect('/index');
+
     });
 });
 
@@ -177,12 +186,10 @@ router.get('/detalles', (req, res) => {
 
 // PACIENTE
 router.get('/crearPaciente', (req, res) => {
-    console.log('se llama')
     res.render('crearPaciente');
 });
 
 router.post('/agregarPaciente', (req, res) => {
-    console.log('daskdasj')
     const nuevoPaciente = {
         nombre_paciente: req.body.nombre_paciente,
         direccion: req.body.direccion,

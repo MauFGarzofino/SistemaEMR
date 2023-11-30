@@ -4,41 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nuevo Usuario</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/crearUsuario.css">
 
 </head>
 <body>
     <div id="contenedor">
         <h2>Crear Nuevo Usuario</h2>
-        <form action="/crearUsuario" method="post">
+        <form action="/crearUsuario" method="post" enctype="multipart/form-data">
             <div>
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+                <label for="nombre_mostrar">Nombre:</label>
+                <input type="text" id="nombre_mostrar" name="nombre_mostrar" placeholder="Nombre" required>
             </div>
             <div>
-                <label for="cuenta">Cuenta:</label>
-                <input type="text" id="cuenta" name="cuenta" placeholder="Cuenta" required>
+                <label for="nombre_usuario">Usuario:</label>
+                <input type="text" id="nombre_usuario" name="nombre_usuario" placeholder="Usuario" required>
             </div>
             <div>
                 <label for="clave">Clave:</label>
                 <input type="text" id="clave" name="clave" placeholder="Clave" required>
             </div>
             <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Email">
+                <label for="foto_perfil">Foto de perfil:</label>
+                <input type="file" id="foto_perfil" name="foto_perfil" accept="image/*">
             </div>
-            <div>
-                <label for="rol">Rol:</label>
-                <input type="text" id="rol" name="rol" placeholder="Rol">
-            </div>
-            <div>
-                <label for="estampa">Estampa:</label>
-                <input type="text" id="estampa" name="estampa" placeholder="Estampa">
-            </div>
-    
             <button type="submit">Crear Usuario</button>
         </form>
-        <button><a class="retorno" href="/index">Volver a la lista de usuarios</a></button>
+        <button><a class="retorno" href="/index">Regresar</a></button>
     </div>
 </body>
 </html>

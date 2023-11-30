@@ -50,8 +50,8 @@ class Database {
 
     // Función para agregar un nuevo usuario
     addUsuario(usuario) {
-        const query = 'INSERT INTO usuario (nombre, cuenta, clave, email, rol, estampa) VALUES (?, ?, ?, ?, ? ,?)';
-        const params = [usuario.nombre, usuario.cuenta, usuario.clave, usuario.email, usuario.rol, usuario.estampa];
+        const query = 'INSERT INTO usuarios (nombre_mostrar, nombre_usuario, clave, foto_perfil) VALUES (?, ?, ?, ?)';
+        const params = [usuario.nombre_mostrar, usuario.nombre_usuario, usuario.clave, usuario.foto_perfil];
         this.db.serialize(() => {
             this.db.run(query, params, function (err) {
                 if (err) console.log(err.message);
